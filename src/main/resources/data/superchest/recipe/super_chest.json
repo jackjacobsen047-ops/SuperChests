@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "ILI",
+    "LCL",
+    "ILI"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "L": "minecraft:oak_log",
+    "C": "minecraft:chest"
+  },
+  "result": {
+    "id": "superchest:super_chest",
+    "count": 1
+  }
+}

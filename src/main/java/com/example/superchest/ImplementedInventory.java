@@ -1,0 +1,73 @@
+package com.example.superchest;
+
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.Inventories;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.collection.DefaultedList;
+
+/**
+ * Small helper that implements all the boilerplate Inventory methods from a
+ * backing DefaultedList. Standard pattern from the Fabric wiki.
+ */
+public interface ImplementedInventory extends Inventory {
+
+    DefaultedList<ItemStack> getItems();
+
+    @Override
+    default int size() {
+        return getItems().size();
+    }
+
+    @Override
+    default boolean isEmpty() {
+        for (int i = 0; i < size(); i++) {
+            if (!getItems().get(i).isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    default ItemStack getStack(int slot) {
+        return getItems().get(slot);
+    }
+
+    @Override
+    default ItemStack removeStack(int slot, int count) {
+        ItemStack result = Inventories.splitStack(getItems(), slot, count);
+        if (!result.isEmpty()) {
+            markDirty();
+        }
+        return result;
+    }
+
+    @Override
+    default ItemStack removeStack(int slot) {
+        return Inventories.removeStack(getItems(), slot);
+    }
+
+    @Override
+    default void setStack(int slot, ItemStack stack) {
+        getItems().set(slot, stack);
+        if (stack.getCount() > getMaxCountPerStack()) {
+            stack.setCount(getMaxCountPerStack());
+        }
+        markDirty();
+    }
+
+    @Override
+    default void clear() {
+        getItems().clear();
+    }
+
+    @Override
+    default void markDirty() {
+    }
+
+    @Override
+    default boolean canPlayerUse(PlayerEntity player) {
+        return true;
+    }
+}
